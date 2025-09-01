@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="theme-color" content="#4CAF50">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-startup-image" href="icons/splash-640x1136.png" media="(device-width: 320px) and (device-height: 568px)">
+<link rel="apple-touch-startup-image" href="icons/splash-750x1334.png" media="(device-width: 375px) and (device-height: 667px)">
+<link rel="apple-touch-startup-image" href="icons/splash-1125x2436.png" media="(device-width: 375px) and (device-height: 812px)">
+<link rel="apple-touch-startup-image" href="icons/splash-1242x2208.png" media="(device-width: 414px) and (device-height: 736px)">
+<link rel="apple-touch-startup-image" href="icons/splash-1536x2048.png" media="(min-device-width: 768px) and (max-device-width: 1024px)">
+<link rel="apple-touch-startup-image" href="icons/splash-1668x2224.png" media="(device-width: 834px) and (device-height: 1112px)">
+<link rel="apple-touch-startup-image" href="icons/splash-2048x2732.png" media="(device-width: 1024px) and (device-height: 1366px)">
+
+  <meta charset="UTF-8" />
+  <title>Paramètres - Kids Tasks</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root{
+      --bg:linear-gradient(135deg,#a8edea,#fed6e3);
+      --text:#333; --header-bg:#4CAF50; --header-text:#fff;
+      --btn-bg:#4CAF50; --btn-text:#fff; --btn-hover:#45a049;
+      --danger:#e53935; --card-bg:#fff;
+    }
+    body.dark{--bg:linear-gradient(135deg,#1f1f1f,#333);--text:#eee;
+      --header-bg:#222;--header-text:#eee;
+      --btn-bg:#555;--btn-text:#eee;--btn-hover:#777;
+      --card-bg:#2a2a2a;}
+    body{font-family:'Segoe UI',Tahoma,sans-serif;margin:0;padding:0;background:var(--bg);color:var(--text);transition:.3s ease;}
+    header{background:var(--header-bg);color:var(--header-text);padding:.8rem 1rem;
+      border-radius:0 0 20px 20px;display:flex;justify-content:space-between;align-items:center;}
+    header a{color:var(--header-text);text-decoration:none;font-weight:600;margin-right:1rem;}
+    .toggle-dark{background:#fff;color:var(--header-bg);border:none;border-radius:6px;
+      cursor:pointer;font-weight:bold;font-size:.9rem;padding:.3rem .6rem;}
+    main{max-width:900px;margin:1rem auto 2rem;background:var(--card-bg);padding:1.5rem;border-radius:20px;box-shadow:0 8px 20px rgba(0,0,0,.15);}
+    h2{text-align:center;margin-bottom:1rem;}
+    .child-card{border:1px solid #ccc;border-radius:12px;padding:1rem;margin-bottom:1rem;background:rgba(255,255,255,.6);}
+    .child-card h3{margin-top:0;display:flex;justify-content:space-between;align-items:center;}
+    .child-card label{display:block;margin:.3rem 0;font-weight:600;}
+    .child-card input{width:100%;padding:.4rem;border:1px solid #ccc;border-radius:6px;}
+    .btn{background:var(--btn-bg);color:var(--btn-text);border:none;padding:.5rem 1rem;border-radius:10px;cursor:pointer;margin-top:.6rem;}
+    .btn:hover{background:var(--btn-hover);}
+    .btn-danger{background:var(--danger);}
+    .actions{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem;}
+    .actions .btn{flex:1 1 48%;}
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <a href="index.html">🏠 Accueil</a>
+    </div>
+    <button class="toggle-dark" onclick="toggleDarkMode()">🌙/☀️</button>
+  </header>
+
+  <main>
+    <h2>⚙ Paramètres globaux</h2>
+    <div id="childrenSettings"></div>
+    <div class="actions">
+      <button class="btn" onclick="ajouterEnfant()">➕ Ajouter un enfant</button>
+      <button class="btn" onclick="sauver()">💾 Enregistrer</button>
+    </div>
+  </main>
+
+  <script>
+    /* 🌙 Dark mode */
+    if(window.matchMedia('(prefers-color-scheme: dark)').matches)document.body.classList.add("dark");
+    function toggleDarkMode(){document.body.classList.toggle("dark");localStorage.setItem("darkMode",document.body.classList.contains("dark"));}
+    if(localStorage.getItem("darkMode")==="true")document.body.classList.add("dark");
+
+    /* Charger enfants */
+    let children=JSON.parse(localStorage.getItem("children"))||[
+      {settings:{childName:"Enfant 1",currency:"€",thresholdMin:10,thresholdMid:13,thresholdMax:16,rewardMid:8,rewardMax:12},
+       tasks:["Tâche 1","Tâche 2","Tâche 3"],notes:{},history:[]}
+    ];
+
+    const cont=document.getElementById("childrenSettings");
+
+    function render(){
+      cont.innerHTML="";
+      children.forEach((c,i)=>{
+        const card=document.createElement("div");
+        card.className="child-card";
+        card.innerHTML=`
+          <h3>${c.settings.childName||("Enfant "+(i+1))} 
+            <button class="btn btn-danger" onclick="supprimerEnfant(${i})">🗑 Supprimer</button>
+          </h3>
+          <label>Nom : <input type="text" id="name-${i}" value="${c.settings.childName}"></label>
+          <label>Devise : <input type="text" id="currency-${i}" value="${c.settings.currency}"></label>
+          <label>Seuil minimum (pas de récompense) : <input type="number" id="min-${i}" value="${c.settings.thresholdMin}"></label>
+          <label>Seuil intermédiaire (récompense ${c.settings.rewardMid}) : <input type="number" id="mid-${i}" value="${c.settings.thresholdMid}"></label>
+          <label>Seuil maximum (récompense ${c.settings.rewardMax}) : <input type="number" id="max-${i}" value="${c.settings.thresholdMax}"></label>
+          <label>Montant récompense intermédiaire : <input type="number" id="rMid-${i}" value="${c.settings.rewardMid}"></label>
+          <label>Montant récompense maximum : <input type="number" id="rMax-${i}" value="${c.settings.rewardMax}"></label>
+        `;
+        cont.appendChild(card);
+      });
+    }
+
+    function ajouterEnfant(){
+      children.push({
+        settings:{childName:"Nouvel enfant",currency:"€",thresholdMin:10,thresholdMid:13,thresholdMax:16,rewardMid:8,rewardMax:12},
+        tasks:["Tâche 1","Tâche 2"],notes:{},history:[]
+      });
+      render();
+    }
+
+    function supprimerEnfant(i){
+      if(confirm("Supprimer cet enfant ?")){children.splice(i,1);render();}
+    }
+
+    function sauver(){
+      children.forEach((c,i)=>{
+        c.settings.childName=document.getElementById("name-"+i).value;
+        c.settings.currency=document.getElementById("currency-"+i).value;
+        c.settings.thresholdMin=parseFloat(document.getElementById("min-"+i).value)||10;
+        c.settings.thresholdMid=parseFloat(document.getElementById("mid-"+i).value)||13;
+        c.settings.thresholdMax=parseFloat(document.getElementById("max-"+i).value)||16;
+        c.settings.rewardMid=parseFloat(document.getElementById("rMid-"+i).value)||8;
+        c.settings.rewardMax=parseFloat(document.getElementById("rMax-"+i).value)||12;
+      });
+      localStorage.setItem("children",JSON.stringify(children));
+      alert("✅ Paramètres sauvegardés !");
+    }
+
+    render();
+  </script>
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("service-worker.js")
+      .then(() => console.log("✅ Service Worker enregistré"))
+      .catch(err => console.error("❌ SW erreur:", err));
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="theme-color" content="#4CAF50">
+  <meta charset="UTF-8" />
+  <title>À propos - Kids Tasks</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root{
+      --bg:linear-gradient(135deg,#a8edea,#fed6e3);
+      --text:#333; --header-bg:#4CAF50; --header-text:#fff;
+      --btn-bg:#4CAF50; --btn-text:#fff; --btn-hover:#45a049;
+      --card-bg:#fff;
+    }
+    body.dark{--bg:linear-gradient(135deg,#1f1f1f,#333);--text:#eee;
+      --header-bg:#222;--header-text:#eee;
+      --btn-bg:#555;--btn-text:#eee;--btn-hover:#777;
+      --card-bg:#2a2a2a;}
+    body{font-family:'Segoe UI',Tahoma,sans-serif;margin:0;padding:0;background:var(--bg);color:var(--text);transition:.3s ease;}
+    header{background:var(--header-bg);color:var(--header-text);padding:.8rem 1rem;
+      border-radius:0 0 20px 20px;display:flex;justify-content:space-between;align-items:center;}
+    header a{color:var(--header-text);text-decoration:none;font-weight:600;margin-right:1rem;}
+    .toggle-dark{background:#fff;color:var(--header-bg);border:none;border-radius:6px;
+      cursor:pointer;font-weight:bold;font-size:.9rem;padding:.3rem .6rem;}
+    main{max-width:800px;margin:1rem auto 2rem;background:var(--card-bg);padding:1.5rem;border-radius:20px;box-shadow:0 8px 20px rgba(0,0,0,.15);}
+    h2{text-align:center;margin-bottom:1rem;}
+    p{line-height:1.6;margin-bottom:1rem;}
+    ul{line-height:1.6;}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav-left">
+      <a href="index.html">🏠 Accueil</a>
+      <a href="settings.html">⚙️ Paramètres</a>
+      <a href="about.html">ℹ️ À propos</a>
+    </div>
+    <button class="toggle-dark" onclick="toggleDarkMode()">🌙/☀️</button>
+  </header>
+
+  <main>
+    <h2>ℹ️ À propos de Kids Tasks</h2>
+    <p><b>Kids Tasks</b> est une petite application éducative qui aide les enfants à suivre leurs tâches hebdomadaires et à recevoir des récompenses motivantes.</p>
+
+    <h3>Fonctionnalités principales :</h3>
+    <ul>
+      <li>👨‍👩‍👧 Gestion multi-enfants</li>
+      <li>📝 Tableau des tâches personnalisable (ajout, suppression, réorganisation par drag & drop)</li>
+      <li>📊 Calcul automatique des moyennes hebdomadaires</li>
+      <li>💶 Récompenses paramétrables selon la performance</li>
+      <li>📖 Historique et graphique d’évolution</li>
+      <li>🎉 Animation de confettis quand une récompense est obtenue</li>
+      <li>🌙 Mode sombre clair / foncé</li>
+    </ul>
+
+    <h3>Comment ça marche ?</h3>
+    <p>
+      - Chaque tâche est notée sur 20.<br>
+      - En fin de semaine, une moyenne est calculée.<br>
+      - Selon la moyenne, l’enfant peut recevoir une récompense financière ou non.<br>
+      - Toutes les données sont sauvegardées dans le <b>navigateur (localStorage)</b> : pas besoin de connexion internet ni de compte.
+    </p>
+
+    <h3>À venir :</h3>
+    <ul>
+      <li>📱 Améliorations de l’affichage mobile</li>
+      <li>☁️ Sauvegarde en ligne via un serveur (Flask + SQLite)</li>
+      <li>🔔 Notifications et rappels</li>
+    </ul>
+
+    <p style="text-align:center;margin-top:1.5rem;color:#555;">✨ Projet éducatif open-source ✨</p>
+  </main>
+
+  <script>
+    /* Dark mode */
+    if(window.matchMedia('(prefers-color-scheme: dark)').matches)document.body.classList.add("dark");
+    function toggleDarkMode(){document.body.classList.toggle("dark");localStorage.setItem("darkMode",document.body.classList.contains("dark"));}
+    if(localStorage.getItem("darkMode")==="true")document.body.classList.add("dark");
+  </script>
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("service-worker.js")
+      .then(() => console.log("✅ Service Worker enregistré"))
+      .catch(err => console.error("❌ SW erreur:", err));
+  }
+</script>
+
+</body>
+</html>
