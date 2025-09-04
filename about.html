@@ -16,40 +16,27 @@
 <link rel="apple-touch-startup-image" href="icons/splash-2048x2732.png" media="(device-width: 1024px) and (device-height: 1366px)">
 
   <meta charset="UTF-8" />
-  <title>À propos - Kids Tasks V0</title>
+  <title>À propos - Kids Tasks</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <style>
-    :root{
-      --bg:linear-gradient(135deg,#a8edea,#fed6e3);
-      --text:#333; --header-bg:#4CAF50; --header-text:#fff;
-      --btn-bg:#4CAF50; --btn-text:#fff; --btn-hover:#45a049;
-      --card-bg:#fff;
-    }
-    body.dark{--bg:linear-gradient(135deg,#1f1f1f,#333);--text:#eee;
-      --header-bg:#222;--header-text:#eee;
-      --btn-bg:#555;--btn-text:#eee;--btn-hover:#777;
-      --card-bg:#2a2a2a;}
-    body{font-family:'Segoe UI',Tahoma,sans-serif;margin:0;padding:0;background:var(--bg);color:var(--text);transition:.3s ease;}
-    header{background:var(--header-bg);color:var(--header-text);padding:.8rem 1rem;
-      border-radius:0 0 20px 20px;display:flex;justify-content:space-between;align-items:center;}
-    header a{color:var(--header-text);text-decoration:none;font-weight:600;margin-right:1rem;}
-    .toggle-dark{background:#fff;color:var(--header-bg);border:none;border-radius:6px;
-      cursor:pointer;font-weight:bold;font-size:.9rem;padding:.3rem .6rem;}
-    main{max-width:800px;margin:1rem auto 2rem;background:var(--card-bg);padding:1.5rem;border-radius:20px;box-shadow:0 8px 20px rgba(0,0,0,.15);}
-    h2{text-align:center;margin-bottom:1rem;}
-    p{line-height:1.6;margin-bottom:1rem;}
-    ul{line-height:1.6;}
-  </style>
+  
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <div class="nav-left">
+
+<header>
+  <div class="nav-left">
+    <button class="menu-toggle" onclick="toggleMenu()">🍔</button>
+    <nav id="navMenu">
       <a href="index.html">🏠 Accueil</a>
       <a href="settings.html">⚙️ Paramètres</a>
       <a href="about.html">ℹ️ À propos</a>
-    </div>
-    <button class="toggle-dark" onclick="toggleDarkMode()">🌙/☀️</button>
-  </header>
+      <a href="install.html">📲 Installer</a>
+    </nav>
+  </div>
+  <button class="toggle-dark" onclick="toggleDarkMode()">🌙/☀️</button>
+</header>
+
+
 
   <main>
     <h2>ℹ️ À propos de Kids Tasks</h2>
@@ -98,8 +85,11 @@
   }
 </script>
 
+<script>
+function toggleMenu(){
+  document.getElementById("navMenu").classList.toggle("show");
+}
+</script>
+
 </body>
 </html>
-
-
-
