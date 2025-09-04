@@ -19,109 +19,25 @@
   <title>Kids Tasks - Multi-Enfants</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    :root{
-      --bg: linear-gradient(135deg,#a8edea,#fed6e3);
-      --text:#333; --header-bg:#4CAF50; --header-text:#fff;
-      --table-header-bg:#4CAF50; --table-header-text:#fff;
-      --btn-bg:#4CAF50; --btn-text:#fff; --btn-hover:#45a049;
-      --danger:#e53935; --info:#2196F3;
-      --reward:#2e7d32; --noreward:#c62828;
-      --card-bg:#fff;
-    }
-    body.dark{--bg:linear-gradient(135deg,#1f1f1f,#333);--text:#eee;
-      --header-bg:#222;--header-text:#eee;--table-header-bg:#444;--table-header-text:#eee;
-      --btn-bg:#555;--btn-text:#eee;--btn-hover:#777;
-      --reward:#81c784;--noreward:#ef5350;--card-bg:#2a2a2a;}
-    body{font-family:'Segoe UI',Tahoma,sans-serif;margin:0;padding:0;background:var(--bg);color:var(--text);transition:.3s ease;}
-
-    /* Header commun */
-    header{background:var(--header-bg);color:var(--header-text);padding:.8rem 1rem;
-      border-radius:0 0 20px 20px;box-shadow:0 4px 10px rgba(0,0,0,.2);
-      display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;}
-    header a{color:var(--header-text);text-decoration:none;font-weight:600;margin-right:1rem;}
-    header a:hover{text-decoration:underline;}
-    .nav-left{display:flex;flex-wrap:wrap;align-items:center;}
-    .toggle-dark{background:#fff;color:var(--header-bg);border:none;border-radius:6px;
-      cursor:pointer;font-weight:bold;font-size:.9rem;padding:.3rem .6rem;}
-
-    /* Calendrier */
-    .calendar{
-      display:flex;align-items:center;gap:.4rem;justify-content:center;
-      background:rgba(255,255,255,.3);
-      padding:.5rem 1rem;margin:.5rem 1rem 0; border-radius:10px;font-weight:600;
-    }
-    .calendar button{
-      background:var(--btn-bg);color:var(--btn-text);
-      border:none;border-radius:6px;cursor:pointer;font-weight:bold;font-size:.9rem;
-      padding:.3rem .6rem;
-    }
-    .calendar button:hover{background:var(--btn-hover);}
-
-    main{max-width:980px;margin:1rem auto 2rem;background:var(--card-bg);padding:1.2rem 1.5rem;border-radius:20px;box-shadow:0 8px 20px rgba(0,0,0,.15);}
-    .child-nav{display:flex;align-items:center;justify-content:center;gap:1rem;margin-bottom:1rem;}
-    .child-nav h2{margin:0;}
-    .child-nav button{background:var(--btn-bg);color:var(--btn-text);border:none;border-radius:6px;
-      cursor:pointer;font-weight:bold;font-size:1rem;padding:.3rem .6rem;}
-    .child-nav button:hover{background:var(--btn-hover);}
-
-    /* Tableau */
-    .table-wrapper{overflow-x:auto;}
-    #tasksTable{width:100%;border-collapse:collapse;margin-bottom:1rem;min-width:520px;}
-    #tasksTable th,#tasksTable td{border:1px solid #ddd;padding:.3rem;text-align:center;}
-    #tasksTable th{background:var(--table-header-bg);color:var(--table-header-text);}
-    .grip{cursor:grab;font-weight:bold;font-size:1.2rem;user-select:none;}
-    tr.dragging{opacity:.5;border:2px dashed var(--info);}
-    input[type="number"]{width:80px;padding:.3rem;border-radius:6px;border:1px solid #ccc;font-size:1rem;text-align:center;}
-    input[disabled]{background:#eee;color:#888;cursor:not-allowed;} 
-    body.dark input[type="number"], body.dark table, body.dark th, body.dark td{color:#000;background:#fff;}
-    body.dark input[disabled]{background:#eee;color:#666;}
-
-    /* Boutons */
-    .btn{background:var(--btn-bg);color:var(--btn-text);border:none;padding:.45rem .8rem;border-radius:10px;cursor:pointer;margin-top:.6rem;width:100%;font-weight:600;}
-    .btn:hover{background:var(--btn-hover);}
-    .btn-delete{background:var(--danger);} .btn-settings{background:var(--info);}
-    .btn-group{display:flex;flex-wrap:wrap;gap:.5rem;} .btn-group .btn{flex:1 1 32%;}
-
-    /* Résultat */
-    .result{margin-top:1rem;padding:.8rem;border-radius:12px;font-size:1.05rem;font-weight:600;text-align:center;background:#f1f8e9;}
-    .reward{color:var(--reward);} .noreward{color:var(--noreward);}
-    .badge{display:inline-block;padding:.2rem .6rem;border-radius:9999px;font-weight:700;margin-left:.4rem;}
-    .badge-gold{background:#ffd54f;color:#4e342e;} .badge-silver{background:#cfd8dc;color:#263238;}
-    .progress-container{width:100%;background:#eee;border-radius:12px;margin-top:1rem;height:20px;overflow:hidden;}
-    .progress-bar{height:100%;width:0%;color:#fff;font-size:.8rem;text-align:right;padding-right:5px;line-height:20px;transition:width .5s ease,background .5s ease;}
-
-    /* Historique */
-    #historique{margin-top:2rem;display:none;}
-    .tabs{display:flex;justify-content:center;gap:1rem;margin-top:1rem;flex-wrap:wrap;}
-    .tabs button{padding:.4rem .8rem;border:none;border-radius:8px;background:#ddd;cursor:pointer;font-weight:bold;font-size:.9rem;}
-    .tabs button.active{background:var(--btn-bg);color:var(--btn-text);}
-    table{width:100%;border-collapse:collapse;margin-top:1rem;}
-    th,td{border:1px solid #ddd;padding:.3rem;text-align:center;}
-    tr:nth-child(even){background:#f9f9f9;}
-    #chartContainer{margin-top:2rem;}
-
-    /* Modale Paramètres */
-    .modal{display:none;position:fixed;z-index:1000;inset:0;background:rgba(0,0,0,.6);justify-content:center;align-items:center;}
-    .modal-content{background:var(--card-bg);padding:1.2rem;border-radius:12px;max-width:460px;width:92%;}
-    .modal-task{display:flex;gap:.4rem;margin-bottom:.5rem;align-items:center;}
-    .modal-task input{flex:1;padding:.45rem;border:1px solid #ccc;border-radius:6px;}
-    .modal-task button{background:var(--danger);color:#fff;border:none;border-radius:6px;padding:.4rem .6rem;cursor:pointer;}
-    .modal-actions{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.8rem;}
-    .modal-actions button{flex:1 1 48%;}
-
-    #confetti{position:fixed;inset:0;pointer-events:none;}
-  </style>
+<link rel="stylesheet" href="style.css">
+  
 </head>
 <body>
-  <header>
-    <div class="nav-left">
+
+<header>
+  <div class="nav-left">
+    <button class="menu-toggle" onclick="toggleMenu()">🍔</button>
+    <nav id="navMenu">
       <a href="index.html">🏠 Accueil</a>
       <a href="settings.html">⚙️ Paramètres</a>
       <a href="about.html">ℹ️ À propos</a>
-    </div>
-    <button class="toggle-dark" onclick="toggleDarkMode()">🌙/☀️</button>
-  </header>
+      <a href="install.html">📲 Installer</a>
+    </nav>
+  </div>
+  <button class="toggle-dark" onclick="toggleDarkMode()">🌙/☀️</button>
+</header>
+
+
 
   <div class="calendar">
     <button onclick="changerSemaine(-1)">◀</button>
@@ -261,6 +177,13 @@
       .catch(err => console.error("❌ SW erreur:", err));
   }
 </script>
+
+<script>
+function toggleMenu(){
+  document.getElementById("navMenu").classList.toggle("show");
+}
+</script>
+
 
 </body>
 </html>

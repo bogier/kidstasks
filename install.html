@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Installer Kids Tasks</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>📲 Installer Kids Tasks</header>
+  
+  <main>
+    <h2>Android (Chrome)</h2>
+    <div class="steps">
+      <div class="step"><span>1️⃣</span>Ouvre <b>Kids Tasks</b> dans Google Chrome.</div>
+      <div class="step"><span>2️⃣</span>
+        <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+        Appuie sur le menu <b>⋮</b> en haut à droite.
+      </div>
+      <div class="step"><span>3️⃣</span>Choisis <b>Ajouter à l’écran d’accueil</b>.</div>
+      <div class="step"><span>4️⃣</span>Valide → l’app sera installée comme une vraie application 🎉</div>
+    </div>
+
+    <h2>iPhone / iPad (Safari)</h2>
+    <div class="steps">
+      <div class="step"><span>1️⃣</span>Ouvre <b>Kids Tasks</b> dans Safari.</div>
+      <div class="step"><span>2️⃣</span>
+        <svg class="icon" viewBox="0 0 24 24"><path d="M12 3v12m0-12l-4 4m4-4l4 4M5 21h14"/></svg>
+        Appuie sur le bouton <b>Partager</b> ⬆️ en bas.
+      </div>
+      <div class="step"><span>3️⃣</span>Choisis <b>Ajouter à l’écran d’accueil</b>.</div>
+      <div class="step"><span>4️⃣</span>
+        <svg class="icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+        Renomme si tu veux, puis valide → l’app est sur ton écran 📱
+      </div>
+    </div>
+
+    <button class="btn" onclick="window.location.href='index.html'">🏠 Retour à l’accueil</button>
+  </main>
+
+  <script>
+    if(window.matchMedia('(prefers-color-scheme: dark)').matches)document.body.classList.add("dark");
+    if(localStorage.getItem("darkMode")==="true")document.body.classList.add("dark");
+  </script>
+</body>
+</html>
